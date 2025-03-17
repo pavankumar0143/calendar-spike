@@ -1,84 +1,122 @@
-# Turborepo starter
+# Appointment Calendar with Google Calendar Integration
 
-This Turborepo starter is maintained by the Turborepo core team.
+This project provides a calendar application with Google Calendar integration. It allows users to create, view, update, and delete appointments, which can be synced with their Google Calendar.
 
-## Using this example
+## Project Structure
 
-Run the following command:
+The project is organized into several modules:
 
-```sh
-npx create-turbo@latest
-```
+- **migrations/appointment-calendar**: Contains database migrations using Knex.js
+- **db-repositories/appointment-calendar**: Contains database repositories using Prisma
+- **apis/appointment-calendar**: Contains the API server using Express.js
+- **apps/appointment-calendar**: Contains the frontend application using React
 
-## What's inside?
+## Technologies Used
 
-This Turborepo includes the following packages/apps:
+### Backend
+- Node.js (v20.x)
+- TypeScript
+- Express.js
+- Prisma (ORM)
+- PostgreSQL
+- Inversify (Dependency Injection)
+- Knex.js (Migrations)
+- Google Calendar API
 
-### Apps and Packages
+### Frontend
+- React.js (v18)
+- TypeScript
+- Zustand (State Management)
+- React Query (Data Fetching)
+- React Big Calendar
+- Shadcn UI Components
+- Tailwind CSS
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+## Setup and Installation
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+### Prerequisites
+- Node.js (v20.x)
+- PostgreSQL
+- Google Cloud Platform account (for Google Calendar API)
 
-### Utilities
+### Database Setup
+1. Create a PostgreSQL database named `calendar_spike`
+2. Update the connection details in `db-repositories/appointment-calendar/.env` and `migrations/appointment-calendar/knexfile.js`
 
-This Turborepo has some additional tools already setup for you:
+### Google Calendar API Setup
+1. Create a project in Google Cloud Platform
+2. Enable the Google Calendar API
+3. Create OAuth 2.0 credentials
+4. Add the redirect URI (e.g., `http://localhost:3002`)
+5. Update the credentials in `apis/appointment-calendar/.env`
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+### Installation and Running
 
-### Build
+1. Install dependencies:
+   ```
+   npm install
+   ```
 
-To build all apps and packages, run the following command:
+2. Run database migrations:
+   ```
+   cd migrations/appointment-calendar
+   npm run migrate:latest
+   ```
 
-```
-cd my-turborepo
-pnpm build
-```
+3. Generate Prisma client:
+   ```
+   cd db-repositories/appointment-calendar
+   npm run prisma:generate
+   ```
 
-### Develop
+4. Start the API server:
+   ```
+   cd apis/appointment-calendar
+   npm run dev
+   ```
 
-To develop all apps and packages, run the following command:
+5. Start the frontend application:
+   ```
+   cd apps/appointment-calendar
+   npm run dev
+   ```
 
-```
-cd my-turborepo
-pnpm dev
-```
+## Features
 
-### Remote Caching
+- User authentication (email-based)
+- Week view calendar
+- Create, view, update, and delete appointments
+- Google Calendar integration
+- Automatic sync of appointments with Google Calendar
+- Check availability in Google Calendar
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+## API Endpoints
 
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+### Users
+- `GET /api/users/:id` - Get user by ID
+- `GET /api/users/email/:email` - Get user by email
+- `POST /api/users` - Create a new user
+- `PUT /api/users/:id` - Update a user
+- `DELETE /api/users/:id` - Delete a user
+- `GET /api/users/google/auth-url` - Get Google OAuth URL
+- `POST /api/users/:id/google/connect` - Connect Google Calendar
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+### Appointments
+- `GET /api/appointments/:id` - Get appointment by ID
+- `GET /api/appointments/user/:userId` - Get appointments by user
+- `GET /api/appointments/user/:userId/range` - Get appointments by date range
+- `POST /api/appointments` - Create a new appointment
+- `PUT /api/appointments/:id` - Update an appointment
+- `DELETE /api/appointments/:id` - Delete an appointment
+- `GET /api/appointments/user/:userId/google-events` - Get Google Calendar events
+- `GET /api/appointments/user/:userId/check-availability` - Check availability
 
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+### Availability
+- `GET /api/availability/:id` - Get availability by ID
+- `GET /api/availability/user/:userId` - Get availability by user
+- `GET /api/availability/user/:userId/day/:dayOfWeek` - Get availability by day
+- `POST /api/availability` - Create availability
+- `POST /api/availability/bulk` - Create multiple availability entries
+- `PUT /api/availability/:id` - Update availability
+- `DELETE /api/availability/:id` - Delete availability
+- `DELETE /api/availability/user/:userId` - Delete all availability for a user

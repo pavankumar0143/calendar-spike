@@ -1,0 +1,28 @@
+{
+  "name": "appointment-calendar-db-repositories",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "lint": "eslint \"**/*.ts*\"",
+    "compile": "tsc",
+    "test": "jest --passWithNoTests",
+    "clean": "rm -rf dist && rm -rf coverage",
+    "build": "npm-run-all clean prisma:generate compile postcompile",
+    "mkdir": "mkdir -p ./dist/generated",
+    "copy-schema": "cp -R ./src/generated/prisma-client ./dist/generated/",
+    "prisma:generate": "cross-env PRISMA_BINARY_TARGET=${PRISMA_BINARY_TARGET:-'[\"native\"]'} ../../node_modules/.bin/prisma generate --schema=./prisma",
+    "postcompile": "npm-run-all mkdir copy-schema"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.7.0",
+    "inversify": "^6.0.1",
+    "reflect-metadata": "^0.2.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "prisma": "^5.7.0",
+    "typescript": "^5.3.2"
+  }
+} 
