@@ -1,0 +1,20 @@
+{
+  "name": "appointment-calendar-migrations",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "migrate:make": "knex migrate:make",
+    "migrate:latest": "knex migrate:latest",
+    "migrate:rollback": "knex migrate:rollback",
+    "migrate:up": "knex migrate:up",
+    "migrate:down": "knex migrate:down"
+  },
+  "dependencies": {
+    "knex": "^2.5.1",
+    "pg": "^8.11.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.2"
+  }
+} 
